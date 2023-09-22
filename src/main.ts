@@ -1,24 +1,35 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import "./style.css";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+let markdown: string = `
+# h1
+
+## h2
+
+### h3
+
+#### h4
+
+##### h5
+
+###### h6
+`;
+
+function parserMD(text: string): string {
+    text = text.replace(/\n$/gm, "<br/>");
+
+    // Header tag
+    text = text.replace(/^# (.+)/gm, "<h1>$1</h1>");
+    text = text.replace(/^## (.+)/gm, "<h2>$1</h2>");
+    text = text.replace(/^### (.+)/gm, "<h3>$1</h3>");
+    text = text.replace(/^#### (.+)/gm, "<h4>$1</h4>");
+    text = text.replace(/^##### (.+)/gm, "<h5>$1</h5>");
+    text = text.replace(/^###### (.+)/gm, "<h6>$1</h6>");
+
+    return text;
+}
+
+document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
+    ${parserMD(markdown)}
   </div>
-`
-
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+`;
