@@ -25,7 +25,9 @@ function parserMD(text: string): string {
     text = text.replace(/^#{6} (.+)/gm, "<h6>$1</h6>");
 
     // P tag
-    text = text.replace(/^\s*(\n)?(.+)/gm, function (word) {
+    text = text.replace(/(.+)/gm, function (word) {
+        console.log(word);
+
         return /\<(\/)?(h\d|ul|ol|li|blockquote|pre|img)/.test(word) ? word : "<p>" + word + "</p>";
     });
 
