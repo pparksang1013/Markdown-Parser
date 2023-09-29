@@ -23,6 +23,13 @@ function parserMD(text: string): string {
     text = text.replace(/^#{4} (.+)/gm, "<h4>$1</h4>");
     text = text.replace(/^#{5} (.+)/gm, "<h5>$1</h5>");
     text = text.replace(/^#{6} (.+)/gm, "<h6>$1</h6>");
+
+    // P tag
+    text = text.replace(/^\s*(\n)?(.+)/gm, function (word) {
+        return /\<(\/)?(h\d|ul|ol|li|blockquote|pre|img)/.test(word) ? word : "<p>" + word + "</p>";
+    });
+
+    return text;
 }
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
