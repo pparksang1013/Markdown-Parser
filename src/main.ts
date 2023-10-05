@@ -8,13 +8,30 @@ let markdown: string = `ABC가나다
 #### h4
 ##### h5
 ###### h6
+- ulList
+  li
+* ulList
 + ulList
 `;
 
 function parserMD(text: string): string {
-    // FIXME: ^, + 기호가 오면 캡쳐링 그룹이 실행이 안된다.
+    // FIXME: Ul tag 다음에 오는 줄이 리스트가 되야한다.
     // Ul tag
-    text = text.replace(/^\- (.+)|^\* (.+)|^\+ (.+)/gm, "<ul><li>$1</li></ul>");
+    text = text.replace(/^\s*[\-\+\*] +(.+)$/gm, function (ul) {
+        let regex = /^\s*[\-\+\*] +(.+)$/gm;
+        let match;
+        let ulTag = `<ul>`;
+
+        while ((match = regex.exec(ul)) !== null) {
+            // 정규 표현식으로 매치된 목록 항목을 ul 태그로 변환
+            let listItemContent = match[1].trim();
+
+            ulTag += "<li>" + listItemContent + "</li>";
+        }
+
+        ulTag += "</ul>";
+        return ulTag;
+    });
 
     // Header tag
     text = text.replace(/^# (.+)/gm, "<h1>$1</h1>");
@@ -25,9 +42,7 @@ function parserMD(text: string): string {
     text = text.replace(/^#{6} (.+)/gm, "<h6>$1</h6>");
 
     // P tag
-    text = text.replace(/(.+)/gm, function (word) {
-        console.log(word);
-
+    text = text.replace(/^\s*(.+)/gm, function (word) {
         return /\<(\/)?(h\d|ul|ol|li|blockquote|pre|img)/.test(word) ? word : "<p>" + word + "</p>";
     });
 
