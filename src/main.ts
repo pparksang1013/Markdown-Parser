@@ -1,37 +1,15 @@
 import "./style.css";
 
-let markdown: string = `ABC가나다
-된건가?
-# h1
-## h2
-### h3
-#### h4
-##### h5
-###### h6
-- ulList
-  li
-* ulList
-+ ulList
+let markdown: string = `*****
 `;
 
 function parserMD(text: string): string {
+    // Hr tag
+    text = text.replace(/^\*{5}|^\*{3}/gm, "<hr/>");
+
     // FIXME: Ul tag 다음에 오는 줄이 리스트가 되야한다.
     // Ul tag
-    text = text.replace(/^\s*[\-\+\*] +(.+)$/gm, function (ul) {
-        let regex = /^\s*[\-\+\*] +(.+)$/gm;
-        let match;
-        let ulTag = `<ul>`;
-
-        while ((match = regex.exec(ul)) !== null) {
-            // 정규 표현식으로 매치된 목록 항목을 ul 태그로 변환
-            let listItemContent = match[1].trim();
-
-            ulTag += "<li>" + listItemContent + "</li>";
-        }
-
-        ulTag += "</ul>";
-        return ulTag;
-    });
+    text = text.replace(/\s/gm, "<h1>SPACE</h1>");
 
     // Header tag
     text = text.replace(/^# (.+)/gm, "<h1>$1</h1>");
