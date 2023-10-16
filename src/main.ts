@@ -4,9 +4,10 @@ let markdown: string = `*****
 + ul
 * ul
 - ul
+_em tag_
 `;
 
-function parserUl(match, capture): string {
+function parserUl(match: string, capture: string): string {
     return `<ul>
               <li>${capture}</li>
             </ul>`;
@@ -18,6 +19,9 @@ function parserMD(text: string): string {
 
     // Ul tag
     text = text.replace(/[\+|\*|\-] (.+)/gm, parserUl);
+
+    // Em tag
+    text = text.replace(/^\_\s?(.+)\s?\_$/gm, "<em>$1</em>");
 
     // Header tag
     text = text.replace(/^# (.+)/gm, "<h1>$1</h1>");
