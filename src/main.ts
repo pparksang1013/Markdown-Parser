@@ -1,15 +1,23 @@
 import "./style.css";
 
 let markdown: string = `*****
++ ul
+* ul
+- ul
 `;
+
+function parserUl(match, capture): string {
+    return `<ul>
+              <li>${capture}</li>
+            </ul>`;
+}
 
 function parserMD(text: string): string {
     // Hr tag
     text = text.replace(/^\*{5}|^\*{3}/gm, "<hr/>");
 
-    // FIXME: Ul tag 다음에 오는 줄이 리스트가 되야한다.
     // Ul tag
-    text = text.replace(/\s/gm, "<h1>SPACE</h1>");
+    text = text.replace(/[\+|\*|\-] (.+)/gm, parserUl);
 
     // Header tag
     text = text.replace(/^# (.+)/gm, "<h1>$1</h1>");
@@ -21,7 +29,7 @@ function parserMD(text: string): string {
 
     // P tag
     text = text.replace(/^\s*(.+)/gm, function (word) {
-        return /\<(\/)?(h\d|ul|ol|li|blockquote|pre|img)/.test(word) ? word : "<p>" + word + "</p>";
+        return /\<(\/)?(h\d|ul|ol|li|blockquote|pre|img|hr)/.test(word) ? word : "<p>" + word + "</p>";
     });
 
     return text;
