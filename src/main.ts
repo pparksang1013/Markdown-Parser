@@ -21,7 +21,10 @@ function parserMD(text: string): string {
     text = text.replace(/[\+|\*|\-] (.+)/gm, parserUl);
 
     // Em tag
-    text = text.replace(/^\_\s?(.+)\s?\_$/gm, "<em>$1</em>");
+    text = text.replace(/^_\s?(.+)\s?_$/gm, "<em>$1</em>");
+
+    // Strong tag
+    // text = text.replace(/^/, "")
 
     // Header tag
     text = text.replace(/^# (.+)/gm, "<h1>$1</h1>");
