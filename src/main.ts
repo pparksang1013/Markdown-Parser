@@ -5,6 +5,8 @@ let markdown: string = `*****
 * ul
 - ul
 _em tag_
+**Strong**
+__strong__
 `;
 
 function parserUl(match: string, capture: string): string {
@@ -17,14 +19,15 @@ function parserMD(text: string): string {
     // Hr tag
     text = text.replace(/^\*{5}|^\*{3}/gm, "<hr/>");
 
+    // Strong tag
+    text = text.replace(/^\*{2}\s*(.+)\s*\*{2}$/gm, "<strong>$1</strong>");
+    text = text.replace(/^_{2}\s*(.+)_{2}\s*$/gm, "<strong>$1</strong>");
+
     // Ul tag
     text = text.replace(/[\+|\*|\-] (.+)/gm, parserUl);
 
     // Em tag
-    text = text.replace(/^_\s?(.+)\s?_$/gm, "<em>$1</em>");
-
-    // Strong tag
-    // text = text.replace(/^/, "")
+    text = text.replace(/^_{1}\s?(.+)\s?_{1}$/gm, "<em>$1</em>");
 
     // Header tag
     text = text.replace(/^# (.+)/gm, "<h1>$1</h1>");
