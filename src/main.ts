@@ -7,6 +7,7 @@ let markdown: string = `*****
 _em tag_
 **Strong**
 __strong__
+asdsaf https://www.google.com/ asdasds
 `;
 
 function parserUl(match: string, capture: string): string {
@@ -29,6 +30,10 @@ function parserMD(text: string): string {
     // Em tag
     text = text.replace(/^_{1}\s?(.+)\s?_{1}$/gm, "<em>$1</em>");
 
+    // FIXME: 문자열 사이에 링크가 있으면 변환되지 않는다.
+    // Link
+    text = text.replace(/\s*(https?.+)\.com$/gm, "<a href=$1>$1</a>");
+
     // Header tag
     text = text.replace(/^# (.+)/gm, "<h1>$1</h1>");
     text = text.replace(/^#{2} (.+)/gm, "<h2>$1</h2>");
@@ -39,7 +44,7 @@ function parserMD(text: string): string {
 
     // P tag
     text = text.replace(/^\s*(.+)/gm, function (word) {
-        return /\<(\/)?(h\d|ul|ol|li|blockquote|pre|img|hr)/.test(word) ? word : "<p>" + word + "</p>";
+        return /\<(\/)?(h\d|ul|ol|li|blockquote|pre|img|hr|a|strong)/.test(word) ? word : "<p>" + word + "</p>";
     });
 
     return text;
